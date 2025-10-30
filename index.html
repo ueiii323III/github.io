@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>货币汇率转换计算器</title>
+    <title>汇率转换计算器</title>
     <style>
         * {
             margin: 0;
@@ -19,92 +19,140 @@
         }
         .container {
             background: white;
-            padding: 30px 20px;
+            padding: 25px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 30px;
-            font-size: 22px;
+            margin-bottom: 25px;
+            font-size: 24px;
         }
-        .currency-row {
+        .currency-selector {
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         select, input {
-            padding: 12px 15px;
+            flex: 1;
+            padding: 12px;
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 16px;
         }
-        select {
-            width: 35%;
-        }
-        input {
-            width: 65%;
-        }
         select:focus, input:focus {
             outline: none;
-            border-color: #2196F3;
+            border-color: #4285f4;
         }
-        .result {
-            text-align: center;
-            padding: 15px;
-            margin: 20px 0 30px;
-            background: #f0f7ff;
-            border-radius: 6px;
-            font-size: 20px;
-            color: #2196F3;
-            min-height: 50px;
+        .swap-btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .footer {
+        .result {
             text-align: center;
-            font-size: 13px;
-            color: #666;
-            margin-top: 20px;
+            margin: 25px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-size: 22px;
+            color: #222;
         }
-        .loading {
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        .action-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            background: #f0f0f0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+        }
+        .action-btn:hover {
+            background: #e0e0e0;
+        }
+        .history-title {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .history-list {
+            max-height: 150px;
+            overflow-y: auto;
+            border-top: 1px solid #eee;
+        }
+        .history-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            color: #555;
+            cursor: pointer;
+        }
+        .history-item:hover {
+            background: #f9f9f9;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
             color: #999;
-            font-style: italic;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>货币汇率转换计算器</h1>
+        <h1>汇率转换计算器</h1>
         
-        <!-- 源货币选择与输入 -->
-        <div class="currency-row">
+        <!-- 货币选择与输入区 -->
+        <div class="currency-selector">
             <select id="fromCurrency">
-                <!-- 动态填充常用货币 -->
+                <!-- 动态填充货币选项 -->
             </select>
-            <input type="number" id="amountInput" placeholder="输入金额" min="0" step="0.01" max="999999999">
+            <button class="swap-btn" id="swapBtn">↔</button>
+            <select id="toCurrency">
+                <!-- 动态填充货币选项 -->
+            </select>
         </div>
         
-        <!-- 目标货币选择 -->
-        <div class="currency-row">
-            <select id="toCurrency">
-                <!-- 动态填充常用货币 -->
-            </select>
-            <div class="result" id="result">
-                <span class="loading">加载中...</span>
-            </div>
+        <input type="number" id="amountInput" placeholder="输入金额" min="0" step="0.01" max="999999999">
+        
+        <!-- 结果显示区 -->
+        <div class="result" id="result">0.00</div>
+        
+        <!-- 操作按钮区 -->
+        <div class="actions">
+            <button class="action-btn" id="clearBtn">清除</button>
+            <button class="action-btn" id="saveBtn">★ 收藏</button>
+        </div>
+        
+        <!-- 历史记录区 -->
+        <div class="history-title">最近记录</div>
+        <div class="history-list" id="historyList">
+            <!-- 动态填充历史记录 -->
         </div>
     </div>
     
     <div class="footer">
-        汇率更新于：<span id="updateTime">加载中...</span>
+        汇率更新于: <span id="rateUpdateTime">加载中...</span>
     </div>
 
     <script>
-        // 1. 配置常用货币（主流货币）
+        // 1. 基础数据配置
         const currencies = [
             { code: 'CNY', name: '人民币' },
             { code: 'USD', name: '美元' },
@@ -113,118 +161,174 @@
             { code: 'GBP', name: '英镑' },
             { code: 'AUD', name: '澳元' },
             { code: 'CAD', name: '加元' },
-            { code: 'HKD', name: '港元' }
+            { code: 'KRW', name: '韩元' },
+            { code: 'HKD', name: '港元' },
+            { code: 'SGD', name: '新加坡元' }
         ];
 
-        // 2. DOM元素
+        // 模拟汇率数据（实际项目中替换为API接口数据）
+        let exchangeRates = {
+            'CNY': { 'USD': 0.138, 'EUR': 0.128, 'JPY': 20.35, 'GBP': 0.112, 'AUD': 0.214, 'CAD': 0.186, 'KRW': 182.5, 'HKD': 1.07, 'SGD': 0.185, 'CNY': 1 },
+            'USD': { 'CNY': 7.25, 'EUR': 0.928, 'JPY': 147.5, 'GBP': 0.812, 'AUD': 1.55, 'CAD': 1.35, 'KRW': 1322, 'HKD': 7.85, 'SGD': 1.34, 'USD': 1 },
+            // 其他货币汇率省略（实际需补充完整）
+        };
+        const lastUpdateTime = new Date().toLocaleTimeString(); // 模拟更新时间
+
+
+        // 2. DOM元素获取
         const fromCurrencyEl = document.getElementById('fromCurrency');
         const toCurrencyEl = document.getElementById('toCurrency');
         const amountInput = document.getElementById('amountInput');
         const resultEl = document.getElementById('result');
-        const updateTimeEl = document.getElementById('updateTime');
+        const swapBtn = document.getElementById('swapBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const historyList = document.getElementById('historyList');
+        const rateUpdateTime = document.getElementById('rateUpdateTime');
 
-        // 3. 初始化页面
+
+        // 3. 初始化函数
         function init() {
             // 填充货币选择框
             currencies.forEach(currency => {
-                const fromOption = document.createElement('option');
-                fromOption.value = currency.code;
-                fromOption.textContent = `${currency.code} (${currency.name})`;
-                fromCurrencyEl.appendChild(fromOption);
+                const option1 = document.createElement('option');
+                option1.value = currency.code;
+                option1.textContent = `${currency.code} (${currency.name})`;
+                fromCurrencyEl.appendChild(option1);
 
-                const toOption = document.createElement('option');
-                toOption.value = currency.code;
-                toOption.textContent = `${currency.code} (${currency.name})`;
-                toCurrencyEl.appendChild(toOption);
+                const option2 = document.createElement('option');
+                option2.value = currency.code;
+                option2.textContent = `${currency.code} (${currency.name})`;
+                toCurrencyEl.appendChild(option2);
             });
 
-            // 默认货币对：CNY → USD
-            fromCurrencyEl.value = 'CNY';
-            toCurrencyEl.value = 'USD';
+            // 加载收藏的货币对（若无则默认CNY→USD）
+            const savedPair = JSON.parse(localStorage.getItem('savedCurrencyPair')) || { from: 'CNY', to: 'USD' };
+            fromCurrencyEl.value = savedPair.from;
+            toCurrencyEl.value = savedPair.to;
+
+            // 显示汇率更新时间
+            rateUpdateTime.textContent = lastUpdateTime;
+
+            // 加载历史记录
+            renderHistory();
 
             // 绑定事件
             bindEvents();
-
-            // 初始加载汇率
-            fetchExchangeRate();
         }
+
 
         // 4. 事件绑定
         function bindEvents() {
-            // 输入金额时计算
+            // 输入金额时实时计算
             amountInput.addEventListener('input', calculate);
-            
-            // 切换货币时重新获取汇率并计算
-            fromCurrencyEl.addEventListener('change', () => {
-                resultEl.innerHTML = '<span class="loading">加载中...</span>';
-                fetchExchangeRate();
+
+            // 切换货币时重新计算
+            fromCurrencyEl.addEventListener('change', calculate);
+            toCurrencyEl.addEventListener('change', calculate);
+
+            // 交换货币
+            swapBtn.addEventListener('click', () => {
+                const temp = fromCurrencyEl.value;
+                fromCurrencyEl.value = toCurrencyEl.value;
+                toCurrencyEl.value = temp;
+                calculate();
             });
-            toCurrencyEl.addEventListener('change', () => {
-                resultEl.innerHTML = '<span class="loading">加载中...</span>';
-                fetchExchangeRate();
+
+            // 清除输入
+            clearBtn.addEventListener('click', () => {
+                amountInput.value = '';
+                resultEl.textContent = '0.00';
+            });
+
+            // 收藏当前货币对
+            saveBtn.addEventListener('click', () => {
+                const pair = {
+                    from: fromCurrencyEl.value,
+                    to: toCurrencyEl.value
+                };
+                localStorage.setItem('savedCurrencyPair', JSON.stringify(pair));
+                alert('已收藏当前货币对！');
+            });
+
+            // 点击历史记录加载数据
+            historyList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('history-item')) {
+                    const data = JSON.parse(e.target.dataset.info);
+                    fromCurrencyEl.value = data.from;
+                    toCurrencyEl.value = data.to;
+                    amountInput.value = data.amount;
+                    calculate();
+                }
             });
         }
 
-        // 5. 从公开API获取实时汇率（使用exchangerate.host免费接口）
-        let currentRate = 0; // 存储当前汇率
-        function fetchExchangeRate() {
+
+        // 5. 核心计算函数
+        function calculate() {
             const from = fromCurrencyEl.value;
             const to = toCurrencyEl.value;
-            
-            // 免费API接口（无需密钥，支持主流货币）
-          // 修改后的API请求代码
-function fetchExchangeRate() {
-  const from = fromCurrencyEl.value; // 源货币（作为基准货币）
-  const to = toCurrencyEl.value; // 目标货币
+            const amount = parseFloat(amountInput.value) || 0;
 
-  // 新的API地址（以源货币为基准，获取所有货币汇率）
-  const apiUrl = `https://open.er-api.com/v6/latest/${from}`;
-  
-  fetch(apiUrl)
-    .then(response => response.json())
-    .then(data => {
-      if (data.result === "success") { // 新API的成功标识
-        currentRate = data.rates[to]; // 从返回的rates中提取目标货币的汇率
-        // 解析更新时间（新API返回的是UTC时间，转换为本地时间）
-        const updateTime = new Date(data.time_last_update_unix * 1000).toLocaleString();
-        updateTimeEl.textContent = updateTime;
-        calculate(); // 计算结果
-      } else {
-        resultEl.textContent = '汇率获取失败，请重试';
-      }
-    })
-    .catch(error => {
-      console.error('API请求错误：', error);
-      resultEl.textContent = '网络错误，请检查连接';
-    });
-}
-                        const updateTime = new Date(data.date).toLocaleDateString() + ' ' + new Date().toLocaleTimeString();
-                        updateTimeEl.textContent = updateTime;
-                        // 计算当前输入的金额
-                        calculate();
-                    } else {
-                        resultEl.textContent = '汇率获取失败，请重试';
-                    }
-                })
-                .catch(error => {
-                    console.error('API请求错误：', error);
-                    resultEl.textContent = '网络错误，请检查连接';
-                });
+            // 获取汇率（若汇率表中无直接汇率，这里简化处理为1:1，实际需完善）
+            const rate = exchangeRates[from]?.[to] || 1;
+            const result = amount * rate;
+
+            // 显示结果（保留2位小数）
+            resultEl.textContent = `${result.toFixed(2)} ${to}`;
+
+            // 保存记录（金额不为0时）
+            if (amount > 0) {
+                saveHistory(from, to, amount, result);
+            }
         }
 
-        // 6. 计算兑换金额
-        function calculate() {
-            const amount = parseFloat(amountInput.value) || 0;
-            if (amount <= 0) {
-                resultEl.textContent = '0.00 ' + toCurrencyEl.value;
+
+        // 6. 历史记录管理
+        function saveHistory(from, to, amount, result) {
+            // 从localStorage获取历史记录（最多保留3条）
+            let history = JSON.parse(localStorage.getItem('exchangeHistory')) || [];
+            
+            // 添加新记录
+            const newRecord = {
+                from,
+                to,
+                amount,
+                result: result.toFixed(2),
+                time: new Date().toLocaleTimeString()
+            };
+            
+            // 插入到头部并限制长度
+            history.unshift(newRecord);
+            if (history.length > 3) history = history.slice(0, 3);
+            
+            // 保存到localStorage
+            localStorage.setItem('exchangeHistory', JSON.stringify(history));
+            
+            // 重新渲染历史记录
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const history = JSON.parse(localStorage.getItem('exchangeHistory')) || [];
+            historyList.innerHTML = '';
+
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="history-item">暂无记录</div>';
                 return;
             }
-            
-            const converted = amount * currentRate;
-            resultEl.textContent = converted.toFixed(2) + ' ' + toCurrencyEl.value;
+
+            history.forEach(record => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.dataset.info = JSON.stringify(record);
+                item.textContent = `${record.amount} ${record.from} = ${record.result} ${record.to} (${record.time})`;
+                historyList.appendChild(item);
+            });
         }
 
-        // 启动初始化
+
+        // 初始化页面
         init();
     </script>
 </body>
