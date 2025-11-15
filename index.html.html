@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ueiii的博客 | 个人展示平台</title>
+  <!-- 外部资源 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  
+  <!-- Tailwind配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#FF6B9D',
+            neutral: {
+              100: '#F5F7FA',
+              800: '#333333'
+            }
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .transition-custom {
+        transition: all 0.3s ease;
+      }
+      .scale-hover {
+        transition: transform 0.3s ease;
+      }
+      .scale-hover:hover {
+        transform: scale(1.05);
+      }
+    }
+  </style>
+  
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      background-color: #FAFAFA;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    .nav-link.active {
+      color: #165DFF;
+      border-bottom: 2px solid #165DFF;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+    .gallery-item img {
+      transition: transform 0.5s ease;
+    }
+    .counter {
+      transition: all 1s ease;
+    }
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+    }
+    @keyframes skeleton-loading {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+  </style>
+</head>
+
+<body class="font-inter text-neutral-800">
+  <!-- 导航栏 -->
+  <header id="navbar" class="fixed w-full bg-white/90 backdrop-blur-sm shadow-sm z-50 transition-all duration-300">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="#home" class="text-2xl font-bold text-primary flex items-center">
+        <i class="fa fa-paper-plane mr-2"></i>ueiii的博客
+      </a>
+      
+      <!-- 桌面导航 -->
+      <nav class="hidden md:flex space-x-8">
+        <a href="#home" class="nav-link py-2 font-medium transition-custom">首页</a>
+        <a href="#about" class="nav-link py-2 font-medium transition-custom">个人简介</a>
+        <a href="#hobbies" class="nav-link py-2 font-medium transition-custom">我的爱好</a>
+        <a href="#gallery" class="nav-link py-2 font-medium transition-custom">我的相册</a>
+        <a href="#message" class="nav-link py-2 font-medium transition-custom">给我留言</a>
+      </nav>
+      
+      <!-- 移动端菜单按钮 -->
+      <button id="menuBtn" class="md:hidden text-dark text-xl">
+        <i class="fa fa-bars"></i>
+      </button>
+    </div>
+    
+    <!-- 移动端导航菜单 -->
+    <div id="mobileMenu" class="md:hidden hidden bg-white shadow-md">
+      <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
+        <a href="#home" class="nav-link py-2 font-medium transition-custom">首页</a>
+        <a href="#about" class="nav-link py-2 font-medium transition-custom">个人简介</a>
+        <a href="#hobbies" class="nav-link py-2 font-medium transition-custom">我的爱好</a>
+        <a href="#gallery" class="nav-link py-2 font-medium transition-custom">我的相册</a>
+        <a href="#message" class="nav-link py-2 font-medium transition-custom">给我留言</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 首页区域 -->
+    <section id="home" class="pt-24 pb-16 md:pt-32 md:pb-24 bg-gradient-to-br from-primary/5 to-secondary/5">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center">
+          <div class="md:w-1/2 mb-10 md:mb-0">
+            <h1 class="text-[clamp(2.5rem,6vw,4rem)] font-bold leading-tight text-shadow mb-4">
+              你好，我是<span class="text-primary">ueiii</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-lg">
+              一名来自武汉理工大学的21岁学生，热爱生活，乐于分享。欢迎来到我的个人博客！
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <a href="#about" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-medium transition-custom flex items-center scale-hover">
+                <i class="fa fa-user mr-2"></i>了解更多
+              </a>
+              <a href="#message" class="bg-secondary hover:bg-secondary/90 text-white px-6 py-3 rounded-lg font-medium transition-custom flex items-center scale-hover">
+                <i class="fa fa-comment mr-2"></i>给我留言
+              </a>
+            </div>
+          </div>
+          <div class="md:w-1/2 flex justify-center">
+            <div class="relative">
+              <!-- 卡通女孩头像（带阴影） -->
+              <div class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white shadow-xl">
+                <img src="https://img.icons8.com/fluency/480/000000/girl.png" alt="ueiii的卡通头像" class="w-full h-full object-cover">
+              </div>
+              <div class="absolute -bottom-4 -right-4 bg-white rounded-full p-3 shadow-lg">
+                <i class="fa fa-code text-primary text-2xl"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 统计数据（带计数动效） -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
+          <div class="bg-white p-6 rounded-xl shadow-sm text-center card-hover">
+            <p class="text-3xl font-bold text-primary mb-2 counter" data-target="21">0</p>
+            <p class="text-gray-600">年龄</p>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-sm text-center card-hover">
+            <p class="text-3xl font-bold text-primary mb-2 counter" data-target="3">0</p>
+            <p class="text-gray-600">在校年限</p>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-sm text-center card-hover">
+            <p class="text-3xl font-bold text-primary mb-2 counter" data-target="12">0</p>
+            <p class="text-gray-600">兴趣爱好</p>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-sm text-center card-hover">
+            <p class="text-3xl font-bold text-primary mb-2 counter" data-target="50">0</p>
+            <p class="text-gray-600">相册照片</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 个人简介（含技能雷达图） -->
+    <section id="about" class="py-16 md:py-24">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-bold mb-4">个人简介</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">关于我的基本信息与成长经历</p>
+          <div class="w-20 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+        </div>
+        
+        <div class="bg-white rounded-2xl shadow-sm p-8 md:p-10">
+          <div class="flex flex-col md:flex-row gap-10">
+            <div class="md:w-1/3">
+              <!-- 卡通风格生活照 -->
+              <img src="https://img.icons8.com/color/480/000000/girl--v1.png" alt="ueiii的生活照" class="w-full h-auto rounded-xl object-cover">
+              
+              <div class="mt-8 bg-neutral-100 rounded-xl p-6">
+                <h3 class="font-bold text-lg mb-4">基本信息</h3>
+                <ul class="space-y-3">
+                  <li class="flex items-start">
+                    <i class="fa fa-user-circle text-primary mt-1 mr-3"></i>
+                    <span><strong>姓名：</strong>ueiii</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa fa-calendar text-primary mt-1 mr-3"></i>
+                    <span><strong>年龄：</strong>21岁</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa fa-graduation-cap text-primary mt-1 mr-3"></i>
+                    <span><strong>学校：</strong>武汉理工大学</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa fa-envelope text-primary mt-1 mr-3"></i>
+                    <span><strong>邮箱：</strong>ueiii@example.com</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa fa-map-marker text-primary mt-1 mr-3"></i>
+                    <span><strong>所在地：</strong>湖北省武汉市</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="md:w-2/3">
+              <h3 class="text-2xl font-bold mb-6">关于我</h3>
+              <p class="text-gray-700 mb-6 leading-relaxed">
+                大家好，我是ueiii，目前是武汉理工大学的一名大三学生。我对计算机科学和互联网技术有着浓厚的兴趣，尤其热衷于前端开发和用户体验设计。
+              </p>
+              <p class="text-gray-700 mb-6 leading-relaxed">
+                在大学期间，我不仅专注于专业课程的学习，还积极参与各种实践项目和社团活动。曾担任学校编程社团的技术部部长，组织过多次编程培训和黑客马拉松活动。
+              </p>
+              <p class="text-gray-700 mb-6 leading-relaxed">
+                我喜欢探索新的技术和工具，喜欢通过代码将创意变为现实。除了技术相关的爱好，我也喜欢摄影、旅行和阅读，这些爱好让我能够从不同角度观察世界，获得更多灵感。
+              </p>
+              
+              <!-- 技能雷达图 -->
+              <h3 class="text-xl font-bold mt-8 mb-4">技能特长</h3>
+              <div class="h-64 mb-6">
+                <canvas id="skillChart"></canvas>
+              </div>
+              
+              <h3 class="text-xl font-bold mb-4">校园经历</h3>
+              <div class="space-y-4">
+                <div class="flex items-start">
+                  <div class="bg-primary/10 text-primary p-2 rounded-full mr-4">
+                    <i class="fa fa-code"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-medium">编程社团技术部长</h4>
+                    <p class="text-gray-600 text-sm">组织并开展前端开发、算法竞赛等培训活动，带领团队完成3个校园技术项目。</p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <div class="bg-secondary/10 text-secondary p-2 rounded-full mr-4">
+                    <i class="fa fa-camera"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-medium">校园摄影协会成员</h4>
+                    <p class="text-gray-600 text-sm">参与校园风光摄影展策划，作品《理工黄昏》获校级摄影比赛二等奖。</p>
+                  </div>
+                </div>
+              </div>
+              
+              <a href="#message" class="inline-block bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-medium transition-custom scale-hover mt-6">
+                联系我 <i class="fa fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 我的爱好（与相册联动） -->
+    <section id="hobbies" class="py-16 md:py-24 bg-neutral-100">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-bold mb-4">我的爱好</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">生活不止眼前的苟且，还有诗和远方</p>
+          <div class="w-20 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- 爱好卡片1 - 编程 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover hobby-card" data-filter="hobby">
+            <div class="h-48 overflow-hidden">
+              <img src="https://picsum.photos/id/96/600/400" alt="编程开发" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-code text-primary text-xl"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-3">编程开发</h3>
+              <p class="text-gray-600 mb-4">
+                我喜欢通过代码创造各种应用和网站，解决实际问题。尤其喜欢前端开发，因为可以直接看到自己的成果。
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">JavaScript</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">React</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Vue</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 爱好卡片2 - 摄影 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover hobby-card" data-filter="hobby">
+            <div class="h-48 overflow-hidden">
+              <img src="https://picsum.photos/id/10/600/400" alt="摄影" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-camera text-primary text-xl"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-3">摄影</h3>
+              <p class="text-gray-600 mb-4">
+                摄影让我学会用不同的视角观察世界，捕捉生活中的美好瞬间。我喜欢记录旅行中的风景和日常生活的点滴。
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">风景</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">人像</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">街拍</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 爱好卡片3 - 旅行 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover hobby-card" data-filter="travel">
+            <div class="h-48 overflow-hidden">
+              <img src="https://picsum.photos/id/24/600/400" alt="旅行" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-plane text-primary text-xl"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-3">旅行</h3>
+              <p class="text-gray-600 mb-4">
+                我喜欢去不同的地方，体验不同的风土人情，品尝当地美食。旅行不仅能放松心情，还能拓宽视野。
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">自然风光</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">城市探索</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">美食</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 爱好卡片4 - 阅读 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover hobby-card" data-filter="hobby">
+            <div class="h-48 overflow-hidden">
+              <img src="https://picsum.photos/id/240/600/400" alt="阅读" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-book text-primary text-xl"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-3">阅读</h3>
+              <p class="text-gray-600 mb-4">
+                阅读是我获取知识和灵感的重要方式。我喜欢读各种类型的书籍，尤其是科幻小说、历史和技术类书籍。
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">科幻</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">历史</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">技术</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 爱好卡片5 - 运动 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover hobby-card" data-filter="hobby">
+            <div class="h-48 overflow-hidden">
+              <img src="https://picsum.photos/id/116/600/400" alt="运动" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-basketball-ball text-primary text-xl"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-3">运动</h3>
+              <p class="text-gray-600 mb-4">
+                我相信健康的身体是一切的基础。我喜欢篮球、跑步和游泳，这些运动让我保持活力和专注。
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">篮球</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">跑步</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">游泳</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 爱好卡片6 - 音乐 -->
+          <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover hobby-card" data-filter="hobby">
+            <div class="h-48 overflow-hidden">
+              <img src="https://picsum.photos/id/431/600/400" alt="音乐" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-music text-primary text-xl"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-3">音乐</h3>
+              <p class="text-gray-600 mb-4">
+                音乐是我生活中不可或缺的一部分。我喜欢听各种类型的音乐，也会弹吉他。音乐能帮助我放松和集中注意力。
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">摇滚</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">民谣</span>
+                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">吉他</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 我的相册（与爱好联动+图片预览） -->
+    <section id="gallery" class="py-16 md:py-24">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-bold mb-4">我的相册</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">记录生活中的美好瞬间</p>
+          <div class="w-20 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+        </div>
+        
+        <!-- 相册分类 -->
+        <div class="flex flex-wrap justify-center gap-4 mb-10">
+          <button class="gallery-filter active px-5 py-2 rounded-full bg-primary text-white font-medium transition-custom" data-filter="all">全部</button>
+          <button class="gallery-filter px-5 py-2 rounded-full bg-light hover:bg-gray-200 text-gray-700 font-medium transition-custom" data-filter="travel">旅行</button>
+          <button class="gallery-filter px-5 py-2 rounded-full bg-light hover:bg-gray-200 text-gray-700 font-medium transition-custom" data-filter="daily">日常</button>
+          <button class="gallery-filter px-5 py-2 rounded-full bg-light hover:bg-gray-200 text-gray-700 font-medium transition-custom" data-filter="school">校园</button>
+          <button class="gallery-filter px-5 py-2 rounded-full bg-light hover:bg-gray-200 text-gray-700 font-medium transition-custom" data-filter="hobby">爱好</button>
+        </div>
+        
+        <!-- 相册图片（带预览） -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- 相册图片1 -->
+          <div class="gallery-item rounded-xl overflow-hidden shadow-sm" data-category="travel">
+            <img src="https://picsum.photos/id/15/600/400" alt="海边日落" class="w-full h-64 object-cover cursor-pointer" onclick="openGalleryModal(this.src, '海边日落', '在青岛旅行时拍摄的美丽日落')">
+            <div class="p-4 bg-white">
+              <h3 class="font-bold">海边日落</h3>
+              <p class="text-gray-600 text-sm">在青岛旅行时拍摄的美丽日落</p>
+            </div>
+          </div>
+          
+          <!-- 相册图片2 -->
+          <div class="gallery-item rounded-xl overflow-hidden shadow-sm" data-category="school">
+            <img src="https://picsum.photos/id/25/600/400" alt="校园秋色" class="w-full h-64 object-cover cursor-pointer" onclick="openGalleryModal(this.src, '校园秋色', '武汉理工大学校园的秋天')">
+            <div class="p-4 bg-white">
+              <h3 class="font-bold">校园秋色</h3>
+              <p class="text-gray-600 text-sm">武汉理工大学校园的秋天</p>
+            </div>
+          </div>
+          
+          <!-- 相册图片3 -->
+          <div class="gallery-item rounded-xl overflow-hidden shadow-sm" data-category="hobby">
+            <img src="https://picsum.photos/id/96/600/400" alt="编程时光" class="w-full h-64 object-cover cursor-pointer" onclick="openGalleryModal(this.src, '编程时光', '参加黑客马拉松时的照片')">
+            <div class="p-4 bg-white">
+              <h3 class="font-bold">编程时光</h3>
+              <p class="text-gray-600 text-sm">参加黑客马拉松时的照片</p>
+            </div>
+          </div>
+          
+          <!-- 相册图片4 -->
+          <div class="gallery-item rounded-xl overflow-hidden shadow-sm" data-category="daily">
+            <img src="https://picsum.photos/id/292/600/400" alt="城市夜景" class="w-full h-64 object-cover cursor-pointer" onclick="openGalleryModal(this.src, '城市夜景', '武汉长江大桥的夜景')">
+            <div class="p-4 bg-white">
+              <h3 class="font-bold">城市夜景</h3>
+              <p class="text-gray-600 text-sm">武汉长江大桥的夜景</p>
+            </div>
+          </div>
+          
+          <!-- 相册图片5 -->
+          <div class="gallery-item rounded-xl overflow-hidden shadow-sm" data-category="travel">
+            <img src="https://picsum.photos/id/42/600/400" alt="山间云雾" class="w-full h-64 object-cover cursor-pointer" onclick="openGalleryModal(this.src, '山间云雾', '黄山旅行时拍摄的云海')">
+            <div class="p-4 bg-white">
+              <h3 class="font-bold">山间云雾</h3>
+              <p class="text-gray-600 text-sm">黄山旅行时拍摄的云海</p>
+            </div>
+          </div>
+          
+          <!-- 相册图片6 -->
+          <div class="gallery-item rounded-xl overflow-hidden shadow-sm" data-category="hobby">
+            <img src="https://picsum.photos/id/1059/600/400" alt="篮球比赛" class="w-full h-64 object-cover cursor-pointer" onclick="openGalleryModal(this.src, '篮球比赛', '学校篮球比赛的精彩瞬间')">
+            <div class="p-4 bg-white">
+              <h3 class="font-bold">篮球比赛</h3>
+              <p class="text-gray-600 text-sm">学校篮球比赛的精彩瞬间</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 加载更多按钮 -->
+        <div class="text-center mt-12">
+          <button id="loadMore" class="bg-white hover:bg-gray-50 text-primary border border-primary px-6 py-3 rounded-lg font-medium transition-custom scale-hover">
+            加载更多 <i class="fa fa-refresh ml-2"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 图片预览模态框 -->
+    <div id="galleryModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+      <div class="relative">
+        <button id="closeModal" class="absolute top-4 right-4 text-white text-2xl">
+          <i class="fa fa-times"></i>
+        </button>
+        <img id="modalImage" src="" alt="" class="max-w-full max-h-[80vh]">
+        <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-4">
+          <h3 id="modalTitle" class="text-xl font-bold"></h3>
+          <p id="modalDesc" class="text-gray-300"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 留言板（带实时验证） -->
+    <section id="message" class="py-16 md:py-24 bg-gradient-to-br from-primary/5 to-secondary/5">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-bold mb-4">给我留言</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">有什么想对我说的，欢迎留言</p>
+          <div class="w-20 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+          <!-- 留言表单 -->
+          <div class="lg:col-span-2 bg-white p-6 md:p-8 rounded-xl shadow-sm">
+            <h3 class="text-xl font-bold mb-6">写下你的留言</h3>
+            <form id="messageForm">
+              <div class="mb-4">
+                <label for="name" class="block text-gray-700 mb-2">你的名字 <span class="text-red-500">*</span></label>
+                <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-custom" placeholder="请输入你的名字" required>
+                <p id="nameError" class="text-red-500 text-sm hidden">请输入有效的名字</p>
+              </div>
+              
+              <div class="mb-4">
+                <label for="email" class="block text-gray-700 mb-2">电子邮箱 <span class="text-red-500">*</span></label>
+                <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-custom" placeholder="请输入你的邮箱" required>
+                <p id="emailError" class="text-red-500 text-sm hidden">请输入有效的邮箱地址</p>
+              </div>
+              
+              <div class="mb-6">
+                <label for="content" class="block text-gray-700 mb-2">留言内容 <span class="text-red-500">*</span></label>
+                <textarea id="content" rows="5" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-custom" placeholder="请输入你的留言内容" required></textarea>
+                <p id="contentError" class="text-red-500 text-sm hidden">请输入留言内容</p>
+              </div>
+              
+              <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-medium transition-custom flex items-center justify-center scale-hover">
+                <i class="fa fa-paper-plane mr-2"></i> 发送留言
+              </button>
+            </form>
+          </div>
+          
+          <!-- 留言列表 -->
+          <div class="lg:col-span-3 bg-white p-6 md:p-8 rounded-xl shadow-sm">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-xl font-bold">最新留言</h3>
+              <span class="text-gray-500 text-sm" id="messageCount">3 条留言</span>
+            </div>
+            
+            <div id="messageList" class="space-y-6">
+              <!-- 留言1 -->
+              <div class="border-b border-gray-100 pb-6">
+                <div class="flex items-center mb-3">
+                  <img src="https://picsum.photos/id/64/100/100" alt="用户头像" class="w-10 h-10 rounded-full object-cover">
+                  <div class="ml-3">
+                    <h4 class="font-medium">张三</h4>
+                    <p class="text-gray-500 text-sm">2023-05-15 14:30</p>
+                  </div>
+                </div>
+                <p class="text-gray-700">你的博客做得真不错！特别是相册部分，照片拍得很好看，希望能看到更多内容。</p>
+              </div>
+              
+              <!-- 留言2 -->
+              <div class="border-b border-gray-100 pb-6">
+                <div class="flex items-center mb-3">
+                  <img src="https://picsum.photos/id/65/100/100" alt="用户头像" class="w-10 h-10 rounded-full object-cover">
+                  <div class="ml-3">
+                    <h4 class="font-medium">李四</h4>
+                    <p class="text-gray-500 text-sm">2023-05-10 09:15</p>
+                  </div>
+                </div>
+                <p class="text-gray-700">同为武汉理工大学的学生，看到你的博客很亲切！我们有很多共同爱好，有空可以交流一下编程经验。</p>
+              </div>
+              
+              <!-- 留言3 -->
+              <div>
+                <div class="flex items-center mb-3">
+                  <img src="https://picsum.photos/id/66/100/100" alt="用户头像" class="w-10 h-10 rounded-full object-cover">
+                  <div class="ml-3">
+                    <h4 class="font-medium">王五</h4>
+                    <p class="text-gray-500 text-sm">2023-05-05 16:45</p>
+                  </div>
+                </div>
+                <p class="text-gray-700">你的摄影作品很专业啊！请问用的是什么相机？有什么摄影技巧可以分享一下吗？</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-neutral-800 text-white py-12">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <h3 class="text-xl font-bold mb-4 flex items-center">
+            <i class="fa fa-paper-plane mr-2"></i>ueiii的博客
+          </h3>
+          <p class="text-gray-400 mb-4">
+            记录生活，分享知识，结交朋友。欢迎来到我的个人博客！
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-custom">
+              <i class="fa fa-github"></i>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-custom">
+              <i class="fa fa-weibo"></i>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-custom">
+              <i class="fa fa-wechat"></i>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-custom">
+              <i class="fa fa-instagram"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-bold mb-4">快速链接</h3>
+          <ul class="space-y-2">
+            <li><a href="#home" class="text-gray-400 hover:text-white transition-custom">首页</a></li>
+            <li><a href="#about" class="text-gray-400 hover:text-white transition-custom">个人简介</a></li>
+            <li><a href="#hobbies" class="text-gray-400 hover:text-white transition-custom">我的爱好</a></li>
+            <li><a href="#gallery" class="text-gray-400 hover:text-white transition-custom">我的相册</a></li>
+            <li><a href="#message" class="text-gray-400 hover:text-white transition-custom">给我留言</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-bold mb-4">联系我</h3>
+          <ul class="space-y-3">
+            <li class="flex items-start">
+              <i class="fa fa-envelope text-primary mt-1 mr-3"></i>
+              <span class="text-gray-400">ueiii@example.com</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-map-marker text-primary mt-1 mr-3"></i>
+              <span class="text-gray-400">湖北省武汉市洪山区珞狮路122号</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-phone text-primary mt-1 mr-3"></i>
+              <span class="text-gray-400">138****5678</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
+        <p>&copy; 2023 ueiii的博客. 保留所有权利.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 返回顶部按钮 -->
+  <button id="backToTop" class="fixed bottom-6 right-6 w-12 h-12 bg-primary text-white rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-primary/90">
+    <i class="fa fa-arrow-up"></i>
+  </button>
+
+  <!-- JavaScript -->
+  <script>
+    // 导航栏滚动效果
+    const navbar = document.getElementById('navbar');
+    const backToTop = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 100) {
+        navbar.classList.add('py-2', 'shadow');
+        navbar.classList.remove('py-3');
+        backToTop.classList.remove('opacity-0', 'invisible');
+        backToTop.classList.add('opacity-100', 'visible');
+      } else {
+        navbar.classList.add('py-3');
+        navbar.classList.remove('py-2', 'shadow');
+        backToTop.classList.add('opacity-0', 'invisible');
+        backToTop.classList.remove('opacity-100', 'visible');
+      }
+      updateActiveNavLink();
+      animateCounters();
+    });
+    
+    // 移动端菜单切换
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    menuBtn.addEventListener('click', function() {
+      mobileMenu.classList.toggle('hidden');
+      const icon = menuBtn.querySelector('i');
+      icon.classList.toggle('fa-bars');
+      icon.classList.toggle('fa-times');
+    });
+    
+    // 返回顶部功能
+    backToTop.addEventListener('click', function() {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+    
+    // 更新当前激活的导航链接
+    function updateActiveNavLink() {
+      const sections = document.querySelectorAll('section');
+      const navLinks = document.querySelectorAll('.nav-link');
+      
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= (sectionTop - 150)) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    }
+    
+    // 计数动效
+    function animateCounters() {
+      const counters = document.querySelectorAll('.counter');
+      counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-target'));
+        const current = parseInt(counter.innerText);
+        const speed = 200; // 动画速度
+        
+        if (current < target && counter.getBoundingClientRect().top < window.innerHeight) {
+          counter.innerText = current + 1;
+          setTimeout(animateCounters, speed / target);
+        } else {
+          counter.innerText = target;
+        }
+      });
+    }
+    
+    // 相册过滤功能
+    const galleryFilters = document.querySelectorAll('.gallery-filter');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    
+    galleryFilters.forEach(filter => {
+      filter.addEventListener('click', function() {
+        galleryFilters.forEach(btn => {
+          btn.classList.remove('bg-primary', 'text-white');
+          btn.classList.add('bg-light', 'text-gray-700', 'hover:bg-gray-200');
+        });
+        this.classList.remove('bg-light', 'text-gray-700', 'hover:bg-gray-200');
+        this.classList.add('bg-primary', 'text-white');
+        
+        const category = this.getAttribute('data-filter');
+        galleryItems.forEach(item => {
+          item.style.display = (category === 'all' || item.getAttribute('data-category') === category) ? 'block' : 'none';
+        });
+      });
+    });
+    
+    // 爱好与相册联动
+    const hobbyCards = document.querySelectorAll('.hobby-card');
+    hobbyCards.forEach(card => {
+      card.addEventListener('click', function() {
+        const filter = this.getAttribute('data-filter');
+        galleryFilters.forEach(btn => {
+          if (btn.getAttribute('data-filter') === filter) {
+            btn.click();
+          }
+        });
+        window.scrollTo({
+          top: document.getElementById('gallery').offsetTop - 80,
+          behavior: 'smooth'
+        });
+      });
+    });
+    
+    // 图片预览模态框
+    function openGalleryModal(src, title, desc) {
+      const modal = document.getElementById('galleryModal');
+      const modalImage = document.getElementById('modalImage');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalDesc = document.getElementById('modalDesc');
+      
+      modalImage.src = src;
+      modalTitle.innerText = title;
+      modalDesc.innerText = desc;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    document.getElementById('closeModal').addEventListener('click', function() {
+      const modal = document.getElementById('galleryModal');
+      modal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    });
+    
+    // 加载更多相册图片
+    const loadMoreBtn = document.getElementById('loadMore');
+    let imageCount = 6;
+    
+    loadMoreBtn.addEventListener('click', function() {
+      const galleryContainer = document.querySelector('#gallery .grid');
+      const categories = ['travel', 'daily', 'school', 'hobby'];
+      
+      for (let i = 0; i < 3; i++) {
+        imageCount++;
+        const randomId = Math.floor(Math.random() * 1000);
+        const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+        
+        const galleryItem = document.createElement('div');
+        galleryItem.className = 'gallery-item rounded-xl overflow-hidden shadow-sm';
+        galleryItem.setAttribute('data-category', randomCategory);
+        galleryItem.innerHTML = `
+          <img src="https://picsum.photos/id/${randomId}/600/400" alt="相册图片" class="w-full h-64 object-cover cursor-pointer" onclick="openGalleryModal(this.src, '新照片 ${imageCount}', '最近添加的照片')">
+          <div class="p-4 bg-white">
+            <h3 class="font-bold">新照片 ${imageCount}</h3>
+            <p class="text-gray-600 text-sm">最近添加的照片</p>
+          </div>
+        `;
+        galleryContainer.appendChild(galleryItem);
+      }
+      
+      this.innerHTML = '<i class="fa fa-check mr-2"></i> 已加载更多';
+      setTimeout(() => {
+        this.innerHTML = '加载更多 <i class="fa fa-refresh ml-2"></i>';
+      }, 1500);
+    });
+    
+    // 留言表单实时验证
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const contentInput = document.getElementById('content');
+    const nameError = document.getElementById('nameError');
+    const emailError = document.getElementById('emailError');
+    const contentError = document.getElementById('contentError');
+    
+    nameInput.addEventListener('blur', function() {
+      if (this.value.trim() === '') {
+        nameError.classList.remove('hidden');
+      } else {
+        nameError.classList.add('hidden');
+      }
+    });
+    
+    emailInput.addEventListener('blur', function() {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(this.value)) {
+        emailError.classList.remove('hidden');
+      } else {
+        emailError.classList.add('hidden');
+      }
+    });
+    
+    contentInput.addEventListener('blur', function() {
+      if (this.value.trim() === '') {
+        contentError.classList.remove('hidden');
+      } else {
+        contentError.classList.add('hidden');
+      }
+    });
+    
+    // 留言表单提交
+    const messageForm = document.getElementById('messageForm');
+    const messageList = document.getElementById('messageList');
+    const messageCount = document.getElementById('messageCount');
+    
+    messageForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      let isValid = true;
+      if (nameInput.value.trim() === '') {
+        nameError.classList.remove('hidden');
+        isValid = false;
+      }
+      
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailInput.value)) {
+        emailError.classList.remove('hidden');
+        isValid = false;
+      }
+      
+      if (contentInput.value.trim() === '') {
+        contentError.classList.remove('hidden');
+        isValid = false;
+      }
+      
+      if (!isValid) return;
+      
+      const name = nameInput.value;
+      const content = contentInput.value;
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      
+      const newMessage = document.createElement('div');
+      newMessage.className = 'border-b border-gray-100 pb-6';
+      newMessage.innerHTML = `
+        <div class="flex items-center mb-3">
+          <img src="https://picsum.photos/id/${Math.floor(Math.random() * 100)}/100/100" alt="用户头像" class="w-10 h-10 rounded-full object-cover">
+          <div class="ml-3">
+            <h4 class="font-medium">${name}</h4>
+            <p class="text-gray-500 text-sm">${dateStr}</p>
+          </div>
+        </div>
+        <p class="text-gray-700">${content}</p>
+      `;
+      
+      messageList.insertBefore(newMessage, messageList.firstChild);
+      messageCount.textContent = `${parseInt(messageCount.textContent) + 1} 条留言`;
+      messageForm.reset();
+      alert('留言提交成功！感谢你的留言。');
+    });
+    
+    // 技能雷达图
+    const skillCtx = document.getElementById('skillChart').getContext('2d');
+    new Chart(skillCtx, {
+      type: 'radar',
+      data: {
+        labels: ['HTML/CSS', 'JavaScript', 'React', 'UI设计', 'Python', '摄影'],
+        datasets: [{
+          label: '技能熟练度',
+          data: [90, 85, 75, 70, 65, 80],
+          backgroundColor: 'rgba(22, 93, 255, 0.2)',
+          borderColor: 'rgba(22, 93, 255, 0.7)',
+          pointBackgroundColor: 'rgba(22, 93, 255, 1)',
+        }]
+      },
+      options: {
+        scales: {
+          r: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              stepSize: 20
+            }
+          }
+        }
+      }
+    });
+    
+    // 初始化
+    updateActiveNavLink();
+  </script>
+</body>
+</html>
