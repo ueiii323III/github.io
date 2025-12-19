@@ -1,0 +1,181 @@
+{
+  "basicInfo": {
+    "name": "孙可馨",
+    "gender": "女",
+    "age": 20,
+    "grade": "大二",
+    "school": "武汉理工大学",
+    "major": "经济学专业",
+    "phone": "13154715568",
+    "email": "1783073686@qq.com"
+  },
+  "skills": [
+    {
+      "id": "1",
+      "name": "Excel数据处理",
+      "type": "专业技能",
+      "description": "熟练掌握数据透视表、函数建模、图表制作",
+      "proficiency": "高级"
+    },
+    {
+      "id": "2",
+      "name": "SPSS统计分析",
+      "type": "专业技能",
+      "description": "基础统计分析、描述性统计、相关性分析",
+      "proficiency": "中级"
+    },
+    {
+      "id": "3",
+      "name": "Python数据分析",
+      "type": "专业技能",
+      "description": "Pandas数据处理、Matplotlib数据可视化",
+      "proficiency": "中级"
+    },
+    {
+      "id": "4",
+      "name": "微观经济学",
+      "type": "专业知识",
+      "description": "供需分析、市场均衡、消费者行为理论",
+      "proficiency": "高级"
+    },
+    {
+      "id": "5",
+      "name": "宏观经济学",
+      "type": "专业知识",
+      "description": "GDP分析、货币政策、财政政策",
+      "proficiency": "高级"
+    },
+    {
+      "id": "6",
+      "name": "会计学基础",
+      "type": "专业知识",
+      "description": "会计要素、财务报表分析、成本核算",
+      "proficiency": "中级"
+    },
+    {
+      "id": "7",
+      "name": "统计学",
+      "type": "专业知识",
+      "description": "概率分布、假设检验、回归分析",
+      "proficiency": "高级"
+    },
+    {
+      "id": "8",
+      "name": "英语六级",
+      "type": "语言能力",
+      "description": "520+分，具备良好的听说读写能力",
+      "proficiency": "高级"
+    },
+    {
+      "id": "9",
+      "name": "普通话二甲",
+      "type": "语言能力",
+      "description": "标准普通话，良好的语言表达能力",
+      "proficiency": "高级"
+    },
+    {
+      "id": "10",
+      "name": "商务英语沟通",
+      "type": "语言能力",
+      "description": "基础商务英语口语和书面沟通",
+      "proficiency": "中级"
+    },
+    {
+      "id": "11",
+      "name": "活动策划",
+      "type": "软技能",
+      "description": "校园活动策划、组织协调、时间管理",
+      "proficiency": "高级"
+    },
+    {
+      "id": "12",
+      "name": "调研数据分析",
+      "type": "软技能",
+      "description": "问卷设计、数据收集、分析报告撰写",
+      "proficiency": "高级"
+    },
+    {
+      "id": "13",
+      "name": "团队协作",
+      "type": "软技能",
+      "description": "团队合作、沟通协调、冲突解决",
+      "proficiency": "高级"
+    },
+    {
+      "id": "14",
+      "name": "公文写作",
+      "type": "软技能",
+      "description": "正式文档撰写、报告写作、总结汇报",
+      "proficiency": "中级"
+    }
+  ],
+  "experiences": [
+    {
+      "id": "1",
+      "startDate": "2024-09",
+      "endDate": "至今",
+      "title": "经济学院学生会外联部干事",
+      "organization": "武汉理工大学经济学院学生会",
+      "role": "外联部干事",
+      "description": "负责校企合作对接、校园经济类活动策划",
+      "achievements": "成功策划组织'财经知识竞赛'，参与人数200+；联系10+家企业建立合作关系；完成活动数据统计与总结报告3份"
+    },
+    {
+      "id": "2",
+      "startDate": "2024-07",
+      "endDate": "2024-08",
+      "title": "社区经济调研志愿者",
+      "organization": "武汉市洪山区社区服务中心",
+      "role": "调研志愿者",
+      "description": "参与小微企业经营状况调研项目",
+      "achievements": "收集整理调研数据500+条，完成小微企业现状分析报告1份，为社区政策制定提供数据支持"
+    },
+    {
+      "id": "3",
+      "startDate": "2024-04",
+      "endDate": "2024-06",
+      "title": "《西方经济学》课程项目",
+      "organization": "武汉理工大学",
+      "role": "项目核心成员",
+      "description": "分析武汉市消费券对零售业的影响",
+      "achievements": "完成数据收集与处理，运用回归分析方法验证消费券政策效果；项目获班级优秀，成果在班级展示"
+    }
+  ],
+  "education": {
+    "id": "1",
+    "university": "武汉理工大学",
+    "major": "经济学专业",
+    "degree": "本科在读",
+    "startDate": "2024-09",
+    "endDate": "2028-06",
+    "gpa": "3.5",
+    "gpaMax": "4.0",
+    "courses": [
+      {
+        "name": "微观经济学",
+        "description": "供需理论、市场结构、消费者行为"
+      },
+      {
+        "name": "宏观经济学",
+        "description": "国民经济核算、经济增长、经济政策"
+      },
+      {
+        "name": "会计学基础",
+        "description": "会计原理、财务报表、成本管理"
+      },
+      {
+        "name": "统计学",
+        "description": "描述统计、推断统计、假设检验"
+      },
+      {
+        "name": "计量经济学",
+        "description": "回归分析、时间序列、模型建立",
+        "isElective": true
+      }
+    ]
+  },
+  "adminCredentials": {
+    "username": "sunkx",
+    "passwordHash": "WUT2024@_hashed"
+  }
+}
