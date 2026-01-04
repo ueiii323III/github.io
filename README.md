@@ -82,8 +82,10 @@ yarn dev
 ```
 
 4. **访问应用**
-- 前端展示：http://localhost:3000
-- 管理后台：http://localhost:3000/admin
+- 前端展示：http://1069.jialaner.top/
+- 管理后台：http://1069.jialaner.top/
+- 管理后台账户：sunkx
+- 密码：WUT2024@
 
 ### 构建和部署
 
@@ -237,5 +239,6 @@ theme: {
 - [React Hook Form](https://react-hook-form.com/) - 高性能表单库
 
 ---
+
 
 ⭐ 如果这个项目对您有帮助，请给个 Star 支持一下！
